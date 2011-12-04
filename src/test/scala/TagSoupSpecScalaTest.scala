@@ -22,8 +22,8 @@ class TagSoupHandlerVerbsSpec extends FlatSpec with ShouldMatchers {
   }
 
   "Extending implicit TagSoup" should "make BadHtmlClass parsable, though this is ugly" in {
-    var request = new BadHtmlClass() with ImplicitTagSoupHandlerVerbs
-    val title = Http(request.toTagSoupHandlerVerbs(request) tagsouped { nodes =>
+    var request = new BadHtmlClass() with ImplicitTagSoupHandlers
+    val title = Http(request.requestToTagSoupHandlers(request) tagsouped { nodes =>
                   (nodes \\ "title").text
                 })
 
@@ -31,7 +31,7 @@ class TagSoupHandlerVerbsSpec extends FlatSpec with ShouldMatchers {
   }
 
   "Implicit TagSoup converters in scope" should "make Request parsable" in {
-    import ImplicitTagSoup._
+    import TagSoupHttp._
     val request = :/("oregonstate.edu") / "instruct" / "phl302" / "texts" / "hobbes" / "leviathan-c.html"
     val title = Http(request tagsouped { nodes =>
                   (nodes \\ "title").text
@@ -41,7 +41,7 @@ class TagSoupHandlerVerbsSpec extends FlatSpec with ShouldMatchers {
   }
 
   "Implicit TagSoup converters in scope" should "make BadHtml parsable" in {
-    import ImplicitTagSoup._
+    import TagSoupHttp._
     val request = BadHtml
     val title = Http(request tagsouped { nodes =>
                   (nodes \\ "title").text
@@ -51,7 +51,7 @@ class TagSoupHandlerVerbsSpec extends FlatSpec with ShouldMatchers {
   }
 
   "Implicit TagSoup converters in scope" should "make BadHtmlClass parsable" in {
-    import ImplicitTagSoup._
+    import TagSoupHttp._
     val request = new BadHtmlClass
     val title = Http(request tagsouped { nodes =>
                   (nodes \\ "title").text
@@ -84,7 +84,7 @@ class TagSoupHandlerVerbsSpec extends FlatSpec with ShouldMatchers {
 
 object BadHtml_with_ImplicitTagSoupHandlerVerbs
   extends Request(:/("oregonstate.edu") / "instruct" / "phl302" / "texts" / "hobbes" / "leviathan-c.html")
-  with ImplicitTagSoupHandlerVerbs
+  with ImplicitTagSoupHandlers
 
 object BadHtml
   extends Request(:/("oregonstate.edu") / "instruct" / "phl302" / "texts" / "hobbes" / "leviathan-c.html")

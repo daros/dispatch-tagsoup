@@ -24,15 +24,14 @@ object JSoupSpec extends Specification {
       import scala.collection.JavaConversions._
       val l = newsHeadlines.iterator
 
-      l.zipWithIndex.foreach(t => {println(t._2 + ": " + t._1.text + ": " + t._1.attr("href")) })
+      l.zipWithIndex.foreach(t => {println(t._2 + ": " + t._1.text + ": " + t._1.attr("abs:href")) })
 
-      newsHeadlines.size must be_==(10)
+      newsHeadlines.size must be_>(2)
       val lastElm = newsHeadlines.last()
       lastElm.html() must be_==("More&nbsp;current&nbsp;events...")
 
+      val req = newsHeadlines.first.attr("href").split("/").foldLeft(JSoupHtml_Implicit: Request)(_ / _)
       import JSoupHttp._
-      val req: Request = JSoupHtml_Implicit / newsHeadlines.first.attr("href") <:< Map("User-Agent" -> "Dispatch")
-//      val req = new Request("http://en.wikipedia.org/wiki/Community_of_Latin_American_and_Caribbean_States")
       val doc2 = Http(req as_jsouped)
       println(doc2.html)
     }

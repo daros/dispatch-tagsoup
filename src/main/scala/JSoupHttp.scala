@@ -19,7 +19,6 @@ object JSoupHttp extends ImplicitJSoupHandlers
 
 class JSoupHandlers(request: Request) {
   def jsouped [T] (block: (Document) => T) = request >> { (stm, charset) =>
-    println(request.to_uri.toString)
     block(Jsoup.parse(stm, charset, request.to_uri.toString))
   }
   def <\\ [T] (block: (Document) => T) = jsouped (block)
